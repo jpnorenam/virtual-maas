@@ -8,9 +8,9 @@ HOST_USERNAME = ENV["USER"]
 # HOST_USERNAME = "ubuntu"
 
 # Get the primary host IP. You can adjust it with a static value, 
-# e.g. "192.168.1.10"
-HOST_IP = `ip route get 8.8.8.8 | head -1 | cut -z -d' ' -f7`
-# HOST_IP = "192.168.1.10"
+# e.g. "10.5.1.95"
+HOST_IP = `ip route get 10.245.160.2 | head -1 | cut -z -d' ' -f7`
+# HOST_IP = "10.5.1.95"
 
 OAM_NETWORK_PREFIX = "192.168.10."  # Operation and Maintenance (OAM) network
 FIP_NETWORK_PREFIX = "192.168.11."  # FloatingIP network
@@ -32,8 +32,8 @@ CLOUD_NODES_COUNT = 5
 # Adjust the values that would fit into your host's capacity. Note that if you 
 # want to deploy e.g. OpenStack on MAAS, and then spin up VMs on OpenStack, you 
 # need to significantly bump up RAM and CPUs for Cloud Nodes.
-CLOUD_NODE_CPUS   = 2  # vCPUs per Cloud Node
-CLOUD_NODE_MEMORY = 4300  # 4GB plus ~200MB headroom 
+CLOUD_NODE_CPUS   = 1     # 1 vCPUs per Cloud Node
+CLOUD_NODE_MEMORY = 2248  # 2GB plus 200MB headroom 
 
 # Local image mirror (See https://maas.io/docs/local-image-mirror)
 LOCAL_IMAGE_MIRROR_URL = ""
@@ -59,7 +59,7 @@ Vagrant.configure("2") do |config|
     maas.vm.provider :libvirt do |domain|
       domain.default_prefix = ""
       domain.cpus = "1"
-      domain.memory = "6144"
+      domain.memory = "4096"
     end
 
     maas.vm.network "private_network", ip: MAAS_IP,
@@ -128,7 +128,7 @@ Vagrant.configure("2") do |config|
 
   end
 
-  # PXE nodes
+  # PXE nodes https://github.com/vagrant-libvirt/vagrant-libvirt#no-box-and-pxe-boot
   (1..CLOUD_NODES_COUNT).each do |i|
     config.vm.define "node#{"%02d" % i}" do |node|
 
