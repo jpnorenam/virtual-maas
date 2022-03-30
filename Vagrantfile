@@ -44,8 +44,8 @@ LOCAL_IMAGE_MIRROR_URL = ""
 Vagrant.configure("2") do |config|
 
   config.ssh.insert_key = false
-  config.ssh.private_key_path = ["id_rsa", "~/.vagrant.d/insecure_private_key"]
-  config.vm.provision "file", source: "id_rsa.pub", destination: "~/.ssh/authorized_keys"
+  config.ssh.private_key_path = ["~/.ssh/id_rsa", "~/.vagrant.d/insecure_private_key"]
+  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/authorized_keys"
 
   # MAAS Server
   config.vm.define "maas", primary: true do |maas|
@@ -73,7 +73,7 @@ Vagrant.configure("2") do |config|
     # Put the SSH key on MAAS node, so that it can control host's virsh to
     # manage power of Cloud Nodes.
     maas.vm.provision :file, 
-      :source => './id_rsa', :destination => '/tmp/vagrant/id_rsa'
+      :source => '~/.ssh/id_rsa', :destination => '/tmp/vagrant/id_rsa'
 
     # Provision juju client configuration templates
     maas.vm.provision :file, 
@@ -151,8 +151,8 @@ Vagrant.configure("2") do |config|
         domain.default_prefix = ""
         domain.cpus = CLOUD_NODE_CPUS
         domain.memory = CLOUD_NODE_MEMORY
-        domain.storage :file, :size => '16G', :bus => 'scsi'  # Operating System
-        domain.storage :file, :size => '16G', :bus => 'scsi'  # Data disk (e.g. for Ceph OSD)
+        domain.storage :file, :size => '8G', :bus => 'scsi'  # Operating System
+        domain.storage :file, :size => '4G', :bus => 'scsi'  # Data disk (e.g. for Ceph OSD)
         boot_network = {'network' => 'OAM'}
         domain.boot boot_network
         domain.autostart = false
