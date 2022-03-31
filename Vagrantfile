@@ -88,6 +88,10 @@ Vagrant.configure("2") do |config|
       :source => './ceph/bundle.yaml',
       :destination => '~vagrant/ceph/bundle.yaml'
 
+    # Configure DNS server and proxy for serverstack
+    maas.vm.provision :shell, 
+      :path => './scripts/000-configure-networking.sh'
+
     # Install required packages
     maas.vm.provision :shell, 
       :path => './scripts/010-install-packages.sh'
